@@ -1,0 +1,20 @@
+version: "1.0"
+services:
+        mariadb:
+                container_name: mariadb
+                hostname: mariadb_server
+                image: "mariadb_image"
+                init: true
+                restart: always
+                build: "./requirements/mariadb"
+                environment:
+                        - DB_NAME=${DB_NAME}
+                        - USER=${USER}
+                        - USER_PASSWORD=${USER_PASSWORD}
+                        - ADMIN=${ADMIN}
+                        - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+                networks:
+                        - my-network
+networks:
+        my-network:
+                driver: bridge
