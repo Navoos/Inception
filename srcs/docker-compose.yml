@@ -15,6 +15,25 @@ services:
                         - ADMIN_PASSWORD=${ADMIN_PASSWORD}
                 networks:
                         - my-network
+        wordpress:
+                container_name: wordpress
+                init: true
+                hostname: php_fpm_server
+                image: "wordpress_image"
+                restart: always
+                build: "./requirements/wordpress"
+                depends_on:
+                        - mariadb
+                environment:
+                        - DB_NAME=${DB_NAME}
+                        - USER=${USER}
+                        - USER_PASSWORD=${USER_PASSWORD}
+                        - DB_HOST=${DB_HOST}
+                        - WORD_ADMIN=${WORD_ADMIN}
+                        - WORD_ADMIN_PASSWORD=${WORD_ADMIN_PASSWORD}
+                        - WORD_ADMIN_EMAIL=${WORD_ADMIN_EMAIL}
+                networks:
+                        - my-network
 networks:
         my-network:
                 driver: bridge
