@@ -15,6 +15,8 @@ services:
                         - ADMIN_PASSWORD=${ADMIN_PASSWORD}
                 networks:
                         - my-network
+                volumes:
+                        - /home/yakhoudr/data/mariadb/wordpress_db:/var/lib/mysql/${DB_NAME}
         wordpress:
                 container_name: wordpress
                 init: true
@@ -34,6 +36,8 @@ services:
                         - WORD_ADMIN_EMAIL=${WORD_ADMIN_EMAIL}
                 networks:
                         - my-network
+                volumes:
+                        - /home/yakhoudr/data/wordpress:/var/www/Inception-website
 networks:
         my-network:
                 driver: bridge

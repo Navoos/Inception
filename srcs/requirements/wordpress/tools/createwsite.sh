@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#wordpress
 if [ ! -d /var/www/Inception-website ]; then
 	mkdir /var/www/Inception-website
 fi
@@ -12,3 +13,9 @@ if [ ! -f /var/www/Inception-website/wp-config.php ]; then
 else
 	echo "Wordpress is already installed."
 fi
+#php-fpm
+if [ ! -d /run/php ]; then
+	mkdir /run/php
+fi
+echo "php-fpm is now running."
+exec php-fpm7.4 -F
