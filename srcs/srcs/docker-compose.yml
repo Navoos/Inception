@@ -16,12 +16,8 @@ services:
                 networks:
                         - database-network
                 volumes:
-                        - "~/data/mariadb/db:/var/lib/mysql/${DB_NAME}:rw,shared"
-                healthcheck:
-                        test: ["CMD", "mysqladmin", "ping", "-h" ,"localhost"]
-                        interval: 15s
-                        timeout: 10s
-                        retries: 1
+                        - "~/data/mariadb/${DB_NAME}:/var/lib/mysql/${DB_NAME}:rw, shared"
+
         wordpress:
                 container_name: wordpress
                 init: true
@@ -30,8 +26,7 @@ services:
                 restart: always
                 build: "./requirements/wordpress"
                 depends_on:
-                        mariadb:
-                                condition: service_healthy
+                        - mariadb
                 environment:
                         - DB_NAME=${DB_NAME}
                         - USER=${USER}
@@ -48,12 +43,7 @@ services:
                         - database-network
                         - webserver-network
                 volumes:
-                        - "~/data/wordpress:/var/www/Inception-website:rw, shared"
-                healthcheck:
-                        test: ["CMD", "pgrep", "-f", "php-fpm: master process" ,"||", "exit", "1"]
-                        interval: 15s
-                        timeout: 10s
-                        retries: 5
+                        - "~/data/wp:/var/www/Inception-website:rw, shared"
 
         nginx:
                 container_name: nginx
@@ -63,14 +53,14 @@ services:
                 restart: always
                 build: "./requirements/nginx"
                 depends_on:
-                        wordpress:
-                                condition: service_healthy
+                        - wordpress
+                        - mariadb
                 networks:
                         - webserver-network
-                volumes:
-                        - "~/data/wordpress:/var/www/Inception-website:ro"
                 ports:
                         - 443:443
+                volumes:
+                        - "~/data/wp:/var/www/Inception-website:rw, shared"
 networks:
         database-network:
         webserver-network:
