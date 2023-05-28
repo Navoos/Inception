@@ -1,0 +1,10 @@
+listen=YES
+pasv_enable=YES
+pasv_min_port=10000
+pasv_max_port=10005
+listen_ipv6=NO
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+ftpd_banner=Welcome to Inception FTP server.
+secure_chroot_dir=/var/run/vsftpd/empty

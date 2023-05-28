@@ -17,7 +17,7 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	mysql_install_db --user=root
 fi
 
-mysqld &
+exec mysqld &
 
 while ! mysqladmin ping -hlocalhost --silent; do
 	sleep 1

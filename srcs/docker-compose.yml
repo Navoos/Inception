@@ -2,9 +2,9 @@ version: "1.0"
 services:
         mariadb:
                 container_name: mariadb
+                init: true
                 hostname: ${DB_HOST}
                 image: "mariadb_image"
-                init: true
                 restart: always
                 build: "./requirements/mariadb"
                 environment:
@@ -16,15 +16,15 @@ services:
                 networks:
                         - database-network
                 volumes:
-                        - "~/data/mariadb/db:/var/lib/mysql/${DB_NAME}:rw,shared"
+                        - "~/data/mariadb/db:/var/lib/mysql/${DB_NAME}"
                 healthcheck:
                         test: ["CMD", "mysqladmin", "ping", "-h" ,"localhost"]
                         interval: 15s
                         timeout: 10s
                         retries: 1
         wordpress:
-                container_name: wordpress
                 init: true
+                container_name: wordpress
                 hostname: php_fpm_server
                 image: "wordpress_image"
                 restart: always
@@ -47,30 +47,55 @@ services:
                 networks:
                         - database-network
                         - webserver-network
+                        - redis-network
                 volumes:
-                        - "~/data/wordpress:/var/www/Inception-website:rw, shared"
+                        - "~/data/wordpress:/var/www/Inception-website"
                 healthcheck:
-                        test: ["CMD", "pgrep", "-f", "php-fpm: master process" ,"||", "exit", "1"]
+                        test: ["CMD", "pgrep", "php-fpm", ">" ,"/dev/null"]
                         interval: 15s
                         timeout: 10s
-                        retries: 5
+                        retries: 10
 
-        nginx:
-                container_name: nginx
+        redis:
                 init: true
+                container_name: redis
+                hostname: redis_server
+                image: "redis_image"
+                restart: always
+                build: "./requirements/bonus/redis"
+                depends_on:
+                        wordpress:
+                                condition: service_started
+                networks:
+                        - redis-network
+        nginx:
+                init: true
+                container_name: nginx
                 hostname: nginx_server
                 image: "nginx_image"
                 restart: always
                 build: "./requirements/nginx"
                 depends_on:
-                        wordpress:
-                                condition: service_healthy
+                        - wordpress
                 networks:
                         - webserver-network
                 volumes:
                         - "~/data/wordpress:/var/www/Inception-website:ro"
                 ports:
                         - 443:443
+        ftp:
+                init: true
+                container_name: ftp
+                image: "ftp_image"
+                restart: always
+                build: "./requirements/bonus/ftp"
+                depends_on:
+                        - wordpress
+                volumes:
+                        - "~/data/wordpress:/home/wordpressuser/files:rw, shared"
+                ports:
+                        - 21:21
 networks:
         database-network:
         webserver-network:
+        redis-network:
