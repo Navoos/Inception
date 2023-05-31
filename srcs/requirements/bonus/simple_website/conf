@@ -1,0 +1,13 @@
+events {
+	
+}
+
+http {
+	server {
+		listen 80;
+		location / {
+			root /var/www/simple_website;
+			index index.html;
+		}
+	}
+}

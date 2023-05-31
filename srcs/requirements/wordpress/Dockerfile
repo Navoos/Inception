@@ -1,4 +1,4 @@
-from debian:stable
+FROM debian:stable
 
 RUN apt-get update && apt-get install -y php
 RUN apt-get update && apt-get install -y php-fpm
