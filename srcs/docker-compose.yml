@@ -114,6 +114,17 @@ services:
                 build: "./requirements/bonus/simple_website"
                 ports:
                         - 80:80
+        portainer:
+                init: true
+                container_name: portainer
+                image: "portainer"
+                restart: always
+                build: "./requirements/bonus/portainer"
+                ports:
+                        - 9000:9000
+                volumes:
+                        - "/var/run/docker.sock:/var/run/docker.sock"
+
 networks:
         database-network:
         webserver-network:
