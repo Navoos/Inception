@@ -1,9 +1,7 @@
 #!/bin/bash
 
-if [ ! -d ~/data ]; then
+if [ ! -d /home/yakhoudr/data ]; then
 	mkdir ~/data
-	mkdir ~/data/wordpress
-	mkdir ~/data/mariadb
+	mkdir -p ~/data/wordpress
+	mkdir -p ~/data/mariadb
 fi
-chmod -R 777 ~/data
-echo "folder for bind mounts in now created."

@@ -17,10 +17,13 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	mysql_install_db --user=root
 fi
 
-exec mysqld &
-
-while ! mysqladmin ping -hlocalhost --silent; do
+service mariadb start
+while ! mysqladmin ping -hlocalhost --silent 2>/dev/null; do
 	sleep 1
 done
 mysql -u root < /mariadb-conf.d/init.sql
-wait 
+service mariadb stop
+while  mysqladmin ping -hlocalhost --silent 2>/dev/null; do
+	sleep 1
+done
+exec mysqld -u root

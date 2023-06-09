@@ -3,6 +3,7 @@ events {
 
 http {
     server {
+    	    include mime.types;
             listen 443 ssl;
             server_name yakhoudr.42.fr;
             ssl_protocols TLSv1.3;
@@ -11,7 +12,9 @@ http {
 	    root /var/www/Inception-website;
 	    index index.php;
 	    location / {
-	    	try_files $uri $uri/ /index.php?$args;
+		    root /var/www/Inception-website;
+		    index index.php;
+		    try_files $uri $uri/ /index.php?$args;
 	    }
 	    location ~ \.php$ {
 	    	include fastcgi_params;

@@ -1,6 +1,6 @@
 FROM debian:stable
 
-RUN apt-get update && apt-get install -y mariadb-server
+RUN apt-get update && apt-get install -y mariadb-server && apt-get -y install systemctl
 COPY ./tools/createdb.sh /createdb.sh
 COPY ./tools/init.sql /mariadb-conf.d/init.sql
 COPY ./conf /etc/mysql/my.cnf
